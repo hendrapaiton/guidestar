@@ -1,5 +1,3 @@
-import pandas as pd
-import re
 import scrapy
 
 from guidestar.items import GuidestarItem
@@ -9,7 +7,6 @@ class OrganizationSpider(scrapy.Spider):
     name = 'organization'
     cur_pages = 1
     num_pages = 0
-    org_names = pd.DataFrame({'Name': []})
     allowed_domains = ['www.guidestar.org']
     start_urls = [
         'https://www.guidestar.org/nonprofit-directory/human-services/general-human-services/'
