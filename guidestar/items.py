@@ -1,4 +1,3 @@
-from unicodedata import name
 import scrapy
 
 
