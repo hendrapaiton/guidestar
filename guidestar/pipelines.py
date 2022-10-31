@@ -1,3 +1,4 @@
+from email import header
 from itemadapter import ItemAdapter
 import pandas as pd
 
@@ -11,4 +12,12 @@ class GuidestarPipeline:
         self.data = pd.DataFrame()
 
     def close_spider(self, spider):
-        self.data.columns = ['Name']
+        self.data.columns = ['organization_name']
+        try:
+            check = pd.read_csv('organization.csv')
+        except:
+            check = pd.DataFrame()
+        if check.empty:
+            self.data.to_csv('organization.csv', index=False)
+        else:
+            self.data.to_csv('organization.csv', mode='a', index=False, header=False)
