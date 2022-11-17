@@ -1,3 +1,6 @@
+from proxy import Proxy
+from threading import Thread
+
 # Scrapy settings for guidestar project
 #
 # For simplicity, this file contains only settings considered important or
@@ -49,6 +52,25 @@ DOWNLOAD_DELAY = 0.5
 #    'guidestar.middlewares.GuidestarSpiderMiddleware': 543,
 #}
 
+## Insert Your List of Proxies Here
+proxy = Proxy()
+proxy.save_proxies()
+proxies = proxy.read_proxies()
+ready = []
+def check(p):
+   checked = proxy.health_check(p)
+   if checked:
+      ready.append(p)
+for p in proxies:
+   Thread(target=check, args=(p,)).start()
+ROTATING_PROXY_LIST = ready
+
+## Enable The Proxy Middleware In Your Downloader Middlewares
+DOWNLOADER_MIDDLEWARES = {
+    'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+}
+
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
@@ -91,3 +113,5 @@ ITEM_PIPELINES = {
 # Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_IMPLEMENTATION = '2.7'
 TWISTED_REACTOR = 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'
+
+# Rolling Proxies

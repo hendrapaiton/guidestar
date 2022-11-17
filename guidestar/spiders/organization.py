@@ -1,7 +1,7 @@
+from guidestar.items import GuidestarItem
+
 import re
 import scrapy
-
-from guidestar.items import GuidestarItem
 
 
 class OrganizationSpider(scrapy.Spider):
